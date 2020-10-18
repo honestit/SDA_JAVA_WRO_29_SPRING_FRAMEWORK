@@ -1,31 +1,34 @@
 package pl.honestit.spring.core.warmup;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import pl.honestit.spring.core.components.ConsolePrinter;
-import pl.honestit.spring.core.components.DialogPrinter;
+import pl.honestit.spring.core.components.Console;
 import pl.honestit.spring.core.components.Printer;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Random;
 
 @Component
 public class HelloWorld {
 
-    private ConsolePrinter consolePrinter;
-    private DialogPrinter dialogPrinter;
+    private Printer consolePrinter;
+    private Printer dialogPrinter;
     private Printer defaultPrinter;
+
+    private Collection<Printer> printers;
 
     public HelloWorld() {
     }
 
     @Autowired
-    public HelloWorld(ConsolePrinter consolePrinter) {
+    public HelloWorld(@Console Printer consolePrinter) {
         this.consolePrinter = consolePrinter;
     }
 
     @Autowired
-    public void setDialogPrinter(DialogPrinter dialogPrinter) {
+    public void setDialogPrinter(@Qualifier("dialogPrinter") Printer dialogPrinter) {
         this.dialogPrinter = dialogPrinter;
     }
 
@@ -43,5 +46,14 @@ public class HelloWorld {
     @Autowired
     public void setDefaultPrinter(Printer defaultPrinter) {
         this.defaultPrinter = defaultPrinter;
+    }
+
+    @Autowired
+    public void setPrinters(Collection<Printer> printers) {
+        this.printers = printers;
+    }
+
+    public void printPrinters() {
+        printers.stream().forEach(printer -> printer.print("Yupi ja jej!"));
     }
 }

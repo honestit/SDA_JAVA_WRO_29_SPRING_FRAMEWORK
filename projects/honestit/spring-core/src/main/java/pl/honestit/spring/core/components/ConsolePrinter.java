@@ -2,7 +2,7 @@ package pl.honestit.spring.core.components;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component @Console
 public class ConsolePrinter implements Printer {
 
     @Override

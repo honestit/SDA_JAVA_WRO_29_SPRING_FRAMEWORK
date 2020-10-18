@@ -10,5 +10,7 @@ public class PrinterApplication {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(WarmUpConfiguration.class);
         HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
         helloWorld.sayHello();
+
+        helloWorld.printPrinters();
     }
 }

@@ -1,5 +1,6 @@
 package pl.honestit.spring.core.components;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 
-@Component
+@Component @Primary
 public class FilePrinter implements Printer {
 
     @Override
