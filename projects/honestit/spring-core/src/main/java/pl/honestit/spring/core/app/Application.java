@@ -1,12 +1,28 @@
 package pl.honestit.spring.core.app;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import pl.honestit.spring.core.config.WarmUpConfiguration;
 import pl.honestit.spring.core.warmup.HelloWorld;
 
 public class Application {
 
     public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(WarmUpConfiguration.class);
+
+        HelloWorld helloBean = context.getBean("helloBean", HelloWorld.class);
+        helloBean.sayHello();
+
+        HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
+        helloBean.sayHello();
+
+        try {
+            HelloWorld whichOne = context.getBean(HelloWorld.class);
+            whichOne.sayHello();
+        } catch (RuntimeException re) {
+            System.err.println(re.getLocalizedMessage());
+        }
 
     }
 
