@@ -17,7 +17,7 @@ public class Application {
         HelloWorld buzzBuzz = context.getBean("buzzBuzz", HelloWorld.class);
         buzzBuzz.sayHello();
 
-        HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
+        HelloWorld helloWorld = context.getBean("helloWorgit ld", HelloWorld.class);
         helloWorld.sayHello();
 
         HelloWorld helloWorld2 = context.getBean("helloWorld", HelloWorld.class);
@@ -29,6 +29,7 @@ public class Application {
             HelloWorld whichOne = context.getBean(HelloWorld.class);
             whichOne.sayHello();
         } catch (RuntimeException re) {
+            re.printStackTrace();
             System.err.println(re.getLocalizedMessage());
         }
 
