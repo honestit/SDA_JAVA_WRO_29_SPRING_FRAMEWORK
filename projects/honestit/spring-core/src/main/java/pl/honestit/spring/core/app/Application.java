@@ -14,8 +14,16 @@ public class Application {
         HelloWorld helloBean = context.getBean("helloBean", HelloWorld.class);
         helloBean.sayHello();
 
+        HelloWorld buzzBuzz = context.getBean("buzzBuzz", HelloWorld.class);
+        buzzBuzz.sayHello();
+
         HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
-        helloBean.sayHello();
+        helloWorld.sayHello();
+
+        HelloWorld helloWorld2 = context.getBean("helloWorld", HelloWorld.class);
+
+        System.out.println("helloBean == helloWorld: " + (helloBean == helloWorld));
+        System.out.println("helloWorld == helloWorld2: " + (helloWorld == helloWorld2));
 
         try {
             HelloWorld whichOne = context.getBean(HelloWorld.class);

@@ -13,4 +13,9 @@ public class WarmUpConfiguration {
     public HelloWorld helloBean() {
         return new HelloWorld();
     }
+
+    @Bean
+    public HelloWorld buzzBuzz() {
+        return new HelloWorld();
+    }
 }
