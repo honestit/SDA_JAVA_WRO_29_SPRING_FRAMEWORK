@@ -3,8 +3,14 @@ package pl.honestit.spring.core.app;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import pl.honestit.spring.core.components.ConsolePrinter;
+import pl.honestit.spring.core.components.DialogPrinter;
+import pl.honestit.spring.core.components.FilePrinter;
+import pl.honestit.spring.core.components.Printer;
 import pl.honestit.spring.core.config.WarmUpConfiguration;
 import pl.honestit.spring.core.warmup.HelloWorld;
+
+import java.util.Arrays;
 
 public class Application {
 
@@ -17,7 +23,7 @@ public class Application {
         HelloWorld buzzBuzz = context.getBean("buzzBuzz", HelloWorld.class);
         buzzBuzz.sayHello();
 
-        HelloWorld helloWorld = context.getBean("helloWorgit ld", HelloWorld.class);
+        HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
         helloWorld.sayHello();
 
         HelloWorld helloWorld2 = context.getBean("helloWorld", HelloWorld.class);
@@ -25,11 +31,30 @@ public class Application {
         System.out.println("helloBean == helloWorld: " + (helloBean == helloWorld));
         System.out.println("helloWorld == helloWorld2: " + (helloWorld == helloWorld2));
 
+        
+
         try {
             HelloWorld whichOne = context.getBean(HelloWorld.class);
             whichOne.sayHello();
         } catch (RuntimeException re) {
-            re.printStackTrace();
+            System.err.println(re.getLocalizedMessage());
+        }
+
+        ConsolePrinter consolePrinter = context.getBean("consolePrinter", ConsolePrinter.class);
+        consolePrinter.print("Jestem konsolą");
+
+        FilePrinter filePrinter = context.getBean("filePrinter", FilePrinter.class);
+        filePrinter.print("Sobie do pliku");
+
+        DialogPrinter dialogPrinter = context.getBean("dialogPrinter", DialogPrinter.class);
+        dialogPrinter.print("W okienku");
+
+        Printer somePrinter = context.getBean("dialogPrinter", Printer.class);
+        somePrinter.print("Gdzie?");
+
+        try {
+            Printer bean = context.getBean(Printer.class);
+        } catch (RuntimeException re) {
             System.err.println(re.getLocalizedMessage());
         }
 
