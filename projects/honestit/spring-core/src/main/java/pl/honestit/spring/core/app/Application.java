@@ -20,10 +20,10 @@ public class Application {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(WarmUpConfiguration.class);
 
         HelloWorld helloBean = context.getBean("helloBean", HelloWorld.class);
-        helloBean.sayHello();
+//        helloBean.sayHello();
 
         HelloWorld buzzBuzz = context.getBean("buzzBuzz", HelloWorld.class);
-        buzzBuzz.sayHello();
+//        buzzBuzz.sayHello();
 
         HelloWorld helloWorld = context.getBean("helloWorld", HelloWorld.class);
         helloWorld.sayHello();
