@@ -3,6 +3,7 @@ package pl.honestit.spring.core.app;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
 import pl.honestit.spring.core.components.ConsolePrinter;
 import pl.honestit.spring.core.components.DialogPrinter;
 import pl.honestit.spring.core.components.FilePrinter;
@@ -10,6 +11,7 @@ import pl.honestit.spring.core.components.Printer;
 import pl.honestit.spring.core.config.WarmUpConfiguration;
 import pl.honestit.spring.core.warmup.HelloWorld;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class Application {
@@ -30,8 +32,6 @@ public class Application {
 
         System.out.println("helloBean == helloWorld: " + (helloBean == helloWorld));
         System.out.println("helloWorld == helloWorld2: " + (helloWorld == helloWorld2));
-
-        
 
         try {
             HelloWorld whichOne = context.getBean(HelloWorld.class);

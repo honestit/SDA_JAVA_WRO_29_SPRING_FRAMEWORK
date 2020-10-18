@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 @Component
 public class FilePrinter implements Printer {
+
     @Override
     public void print(String message) {
         String userHome = System.getProperty("user.home");
