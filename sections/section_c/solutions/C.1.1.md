@@ -18,9 +18,9 @@ Poniżej został uwzględniony pełen plik `pom.xml` w podstawowej konfiguracji
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.framework.version>5.0.7.RELEASE</spring.framework.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <spring.framework.version>5.2.9.RELEASE</spring.framework.version>
     </properties>
 
     <build>

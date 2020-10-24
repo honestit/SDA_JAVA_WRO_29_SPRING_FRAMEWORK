@@ -4,9 +4,10 @@ Na początek dodajemy do klasy `SecurityConfig` podany kod dostarczający źród
     @Bean
     private DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/knowledge_db?serverTimezone=UTC");
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:file:~/spring-kb");
         dataSource.setUsername("root");
+        dataSource.setPassword("pass");
         return dataSource;
     }
 ```

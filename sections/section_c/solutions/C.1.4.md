@@ -1,5 +1,7 @@
 Klasę konfiguracyjną `JpaConfig` umieszczamy w pakiecie `pl.honestit.spring.kb.config`. Klasa oznaczona została adnotacjami:
 - `@Configuration`, aby mogła pełnić rolę konfiguracji Spring'owej i udostępniać bean'y,
+
+Pondato w klasie `RootConfig` dodaliśmy:
 - `@ComponentScan` ze wskazaniem pakietu `pl.honestit.spring.kb.data`, aby umożliwiała automatyczne wykrywanie komponentów związanych z warstwamy dostępu do danych i modelu danych,
 - `@EnableTransactionManagement`, aby aktywować zarządzanie transakcjami i umożliwić wykorzystanie adnotacji `@Transactional` na komponentach typuw `@Repository` czy `@Service`,
 - `@EnableJpaRepositories` ze wskazaniem pakietu `pl.honestit.spring.kb.data.repositories`, aby umożliwić wykorzystanie repozytoriów JPA i tworzenie ich implementacji na podstawie naszych interfejsów.
@@ -9,20 +11,11 @@ Podstawowy kod klas z adnotacjami konfiguracyjnymi:
 ```java
 package pl.honestit.spring.kb.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 
 @Configuration
-@ComponentScan(basePackages = "pl.honestit.spring.kb.data")
-@EnableJpaRepositories(basePackages = "pl.honestit.spring.kb.data.repositories")
-@EnableTransactionManagement
 public class JpaConfig {
 
 }
@@ -61,19 +54,13 @@ Pełen kod klasy `JpaConfig` z obiema metodami:
 package pl.honestit.spring.kb.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 
 @Configuration
-@ComponentScan(basePackages = "pl.honestit.spring.kb.data")
-@EnableJpaRepositories(basePackages = "pl.honestit.spring.kb.data.repositories")
-@EnableTransactionManagement
 public class JpaConfig {
 
     @Bean
@@ -109,21 +96,23 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
     <persistence-unit name="knowledgePU">
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://localhost:3306/knowledge_db?serverTimezone=UTC&amp;useSSL=false&amp;allowPublisKeyRetrieval=true"/>
+                      value="jdbc:h2:file:~/spring-kb"/>
+
             <!--Zmienić nazwę użytkownika na swojego-->
             <property name="javax.persistence.jdbc.user" value="root"/>
+
             <!--Zmienić hasło użytkownika na swoje-->
             <property name="javax.persistence.jdbc.password" value="pass"/>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
-            <property name="hibernate.connection.useUnicode" value="true"/>
-            <property name="hibernate.connection.characterEncoding" value="utf8"/>
-            <property name="hibernate.connection.CharSet" value="utf8"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
         </properties>
     </persistence-unit>
+
 
 </persistence>
 ```

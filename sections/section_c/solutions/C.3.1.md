@@ -9,16 +9,17 @@ Uzupełniony plik `pom.xml` o wymagane zależności do Spring Security. Zwróć 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.honestit.spring</groupId>
-    <artifactId>knowledge-app</artifactId>
+    <artifactId>spring-data-security</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.framework.version>5.1.4.RELEASE</spring.framework.version>
-        <spring.security.version>5.0.6.RELEASE</spring.security.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <spring.framework.version>5.2.9.RELEASE</spring.framework.version>
+        <spring.security.version>5.3.4.RELEASE</spring.security.version>
+        <spring.data.version>2.3.4.RELEASE</spring.data.version>
     </properties>
 
     <dependencies>
@@ -37,7 +38,7 @@ Uzupełniony plik `pom.xml` o wymagane zależności do Spring Security. Zwróć 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.0.8.RELEASE</version>
+            <version>${spring.data.version}</version>
         </dependency>
 
         <dependency>
@@ -55,13 +56,13 @@ Uzupełniony plik `pom.xml` o wymagane zależności do Spring Security. Zwróć 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.3.3.Final</version>
+            <version>5.4.10.Final</version>
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.11</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
         </dependency>
 
         <dependency>
@@ -71,15 +72,28 @@ Uzupełniony plik `pom.xml` o wymagane zależności do Spring Security. Zwróć 
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>3.0.11.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
-        <finalName>knowledge-app</finalName>
+        <finalName>spring-data-security</finalName>
     </build>
 </project>
-
 ```

@@ -3,16 +3,12 @@ Uzupełniony kod klasy `SecurityConfig`. Puste implementacje metod `configure` s
 ```java
 package pl.honestit.spring.kb.config;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@ComponentScan("pl.honestit.spring.kb.security")
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -27,40 +23,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-Naszą klasę konfiguracyjną uwzględniamy również w konfiguracji dispatchera, a więc w klasie `DispatcherConfiguration`:
+Należy również uzupełnić klasę `RootConfig` o adnotację `@EnableWebSecurity`. Klasa ta ostatecznie będzie wyglądać następująco:
 
 ```java
-package pl.honestit.spring.kb.config;
+package pl.honestit.spring.kb;
 
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.Filter;
 
-public class DispatcherConfiguration extends AbstractAnnotationConfigDispatcherServletInitializer {
+@Configuration
+@ComponentScan
+@EnableWebMvc
+@EnableJpaRepositories(basePackages = "pl.honestit.spring.kb.data.repository")
+@EnableTransactionManagement
+@EnableWebSecurity
+public class RootConfig {
 
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{RootConfig.class, JpaConfig.class, SecurityConfig.class};
-    }
-
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{WebConfig.class };
-    }
-
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/"};
-    }
-
-    @Override
-    protected Filter[] getServletFilters() {
-        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding("UTF-8");
-        encodingFilter.setForceEncoding(true);
-        return new Filter[] {encodingFilter};
-    }
 }
 ```
 
