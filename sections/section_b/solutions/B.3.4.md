@@ -101,13 +101,12 @@ Następnie w kontrolerze `UserController` dodajemy zaproponowaną metodę `publi
 
 Nie jest to specjalnie skomplikowany kod, a sposób użycia słownika państw możemy zobaczyć na zmodyfikowanym kodzie formularza:
 
-```jsp
-<%@ page isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Dodawanie użytkownika</title>
+    <meta charset="UTF-8">
+    <title>Dodaj nowego użytkownika</title>
 </head>
 <body>
     <h1>Dodaj nowego użytkownika</h1>
@@ -131,17 +130,10 @@ Nie jest to specjalnie skomplikowany kod, a sposób użycia słownika państw mo
                     <option value="Kobieta">Kobieta</option>
                 </select>
                 </div>
-                <%--
-                
-                    TUTAJ 
-                    
-                --%>
                 <div>
                     <label for="country">Państwo: </label>
                     <select name="country" id="country">
-                        <c:forEach items="${countries}" var="country">
-                            <option value="${country}">${country}</option>
-                        </c:forEach>
+                            <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">Miasto</option>
                     </select>
                 </div>
             </fieldset>
@@ -153,27 +145,29 @@ Nie jest to specjalnie skomplikowany kod, a sposób użycia słownika państw mo
     </div>
 </body>
 </html>
+
 ```
 
 ---
 
-Pamiętajmy również o uzupełnienie kodu widoku `user.jsp` o wyświetlenie państwa użytkownika oraz kodu metody tworzącej użytkownika (`createUser` w `UserController`) o obsługę parametru `country` i zapisanie państwa w obiekcie użytkownika.
+Pamiętajmy również o uzupełnienie kodu widoku `user.html` o wyświetlenie państwa użytkownika oraz kodu metody tworzącej użytkownika (`createUser` w `UserController`) o obsługę parametru `country` i zapisanie państwa w obiekcie użytkownika.
 
 Widok użytkownika:
 
-```jsp
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
-<html>
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Profil użytkownika</title>
 </head>
 <body>
-    <div>Użytkownik o id: ${user.id}</div>
-    <div>Imię: ${user.firstName}</div>
-    <div>Nazwisko: ${user.lastName}</div>
-    <div>Wiek: ${user.age}</div>
-    <div>Płeć: ${user.gender}</div>
-    <div>Państwo: ${user.country}</div>
+<div th:text="|Użytkownik o id: ${user.id}|">Id: 0</div>
+<div th:text="|Imię: ${user.firstName}|">Imię: Jan</div>
+<div th:text="|Nazwisko: ${user.lastName}|">Nazwisko: Kowalski</div>
+<div th:text="|Wiek: ${user.age}|">Wiek: 44</div>
+<div th:text="|Płeć: ${user.gender}|">Płeć: mężczyzna</div>
+<div th:text="|Państwo: ${user.country}|">Państwo: Polska</div>
 </body>
 </html>
 ```

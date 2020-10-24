@@ -28,29 +28,30 @@ public class UserController {
 }
 ```
 
-Zwróć uwagę, na sposób pobierania identyfikatora `id` z parametru ścieżki oraz na wykorzystanie dodatkowego parametru typu `Model`. Jeżeli chcemy, aby jakiś obiekt był dostępny w widoku, do którego nasz kontroler przekierowuje, to możemy go dodać jako atrybut do obiektu typu `Model`. Warto abyś pamiętał/a, że na stronach JSP możemy również wykorzystywać wszystkie obiekty, które są dostępne w mapach atrybutów żądania, sesji czy kontekstu aplikacji, nie tylko w mapie atrybutów modelu.
+Zwróć uwagę, na sposób pobierania identyfikatora `id` z parametru ścieżki oraz na wykorzystanie dodatkowego parametru typu `Model`. Jeżeli chcemy, aby jakiś obiekt był dostępny w widoku, do którego nasz kontroler przekierowuje, to możemy go dodać jako atrybut do obiektu typu `Model`. Warto abyś pamiętał/a, że na stronach HTML możemy również wykorzystywać wszystkie obiekty, które są dostępne w mapach atrybutów żądania, sesji czy kontekstu aplikacji, nie tylko w mapie atrybutów modelu.
 
 ---
 
-Kod strony JSP `user.jsp`, odpowiedzialnej za wyświetlenie danych użytkownika, może wyglądać jak niżej:
+Kod strony HTML `user.html`, odpowiedzialnej za wyświetlenie danych użytkownika, może wyglądać jak niżej:
 
-```jsp
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
-<html>
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Profil użytkownika</title>
 </head>
 <body>
-    <div>Użytkownik o id: ${user.id}</div>
-    <div>Imię: ${user.firstName}</div>
-    <div>Nazwisko: ${user.lastName}</div>
-    <div>Wiek: ${user.age}</div>
-    <div>Płeć: ${user.gender}</div>
+<div th:text="|Użytkownik o id: ${user.id}|">Id: 0</div>
+<div th:text="|Imię: ${user.firstName}|">Imię: Jan</div>
+<div th:text="|Nazwisko: ${user.lastName}|">Nazwisko: Kowalski</div>
+<div th:text="|Wiek: ${user.age}|">Wiek: 44</div>
+<div th:text="|Płeć: ${user.gender}|">Płeć: mężczyzna</div>
 </body>
 </html>
 ```
 
-W kontrolerze obiekt użytkownika został dodany pod nazwą atrybutu `user` i tym samym mamy na stronie JSP do dyspozycji obiekt klasy `User` jako zmienną właśnie o tej nazwie.
+W kontrolerze obiekt użytkownika został dodany pod nazwą atrybutu `user` i tym samym mamy na stronie HTML do dyspozycji obiekt klasy `User` jako zmienną właśnie o tej nazwie.
 
 ---
 
@@ -78,7 +79,7 @@ Nasz kontroler `UserController` zostanie rozszerzony o dwie metody główne. Pie
         // którego używaliśmy do wyświetlenia losowego użytkownika.
         model.addAttribute("user", user);
         // Zwróć uwagę, że nie zwracamy tutaj obiektu User a tekst
-        // "user", który odnosi się do strony JSP: /WEB-INF/views/user.jsp
+        // "user", który odnosi się do strony HTML: /templates/user.html
         return "user";
     }
 
@@ -97,19 +98,18 @@ Nasz kontroler `UserController` zostanie rozszerzony o dwie metody główne. Pie
     }
 ```
 
-Wprowadziliśmy również metodę pomocniczą (`nextIdFromSession`), która obsługuje elementy związane z przechowywaniem kolejnego identyfikatora użytkownika w sesji (jako atrybut). Dzięki temu, że utworzonego w metodzie `createUser` użytkownika wstawiamy do modelu pod tą sąmą nazwą atrybutu, co przy metodzie `showUser` generującej losowe dane, to możemy wykorzystać dokładnie ten sam widok JSP, a więc stronę `user.jsp`, do wyświetlenia danych.
+Wprowadziliśmy również metodę pomocniczą (`nextIdFromSession`), która obsługuje elementy związane z przechowywaniem kolejnego identyfikatora użytkownika w sesji (jako atrybut). Dzięki temu, że utworzonego w metodzie `createUser` użytkownika wstawiamy do modelu pod tą sąmą nazwą atrybutu, co przy metodzie `showUser` generującej losowe dane, to możemy wykorzystać dokładnie ten sam widok HTML, a więc stronę `user.html`, do wyświetlenia danych.
 
 ---
 
 Formularz umożliwiający dodanie użytkownika może wyglądać jak niżej:
 
-```jsp
-<%@ page isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Dodawanie użytkownika</title>
+    <meta charset="UTF-8">
+    <title>Dodaj nowego użytkownika</title>
 </head>
 <body>
     <h1>Dodaj nowego użytkownika</h1>
@@ -151,4 +151,4 @@ Najważniejsze dla nas jest to, aby odpowiednie kontrolki miały nazwy (wartoś�
 Przeprowadzone testy powinny dać Ci następujące obserwacje:
 1. Zmieniając nazwę pola formularza `age` na `someNastyAge` sprawiamy, że ze strony będzie przesyłana wartość pod innym kluczem. W metodzie kontrolera oczekujemy zaś parametru o nazwie `age`. Jeżeli taki parametr się nie pojawi, to Spring MVC automatycznie przerwie obsługę żądania błędem `400 Bad Request`. Możemy parametr `age` w metodzie kontrolera oznaczyć adnotacją `RequestParam(required=false)`, ale w tym przypadku nie jest to dobre rozwiązanie, bo oczekujemy tego parametry od użytkownika. Podsumowując: zapamiętaj, że parametry metody muszą odpowiadać jakimś obiektom uniwersalnym, takim jak `Model` czy `HttpSession` lub **być zmapowane z parametrów żądania**. Domyślnie są silnie wymagane, a ich mapowanie (wiązanie) opiera się na nazwie pola formularza i nazwie parametru metody kontrolera.
 1. Dodanie nowego pola do formularza nie jest błędem. Jego wartość zostanie przesłana wraz z innymi polami do kontrolera, ale nie zostanie obsłużona (bo kontroler jej nie potrzebuje).
-1. Zmiana nazwy atrybutu utworzonego użytkownika z `user` na `newUser` w kodzie kontrolera nie spowoduje żadnego błędu. Natomiast na widoku już tak. Widok `user.jsp` bazuje na zmiennej reprezentującej użytkownika i nazwanej `user`. Taka zmienna musi być dostępna w modelu albo w odpowiedniej mapie związanej z zasięgiem żądania, sesji czy aplikacji. Teraz metoda `showUser` udostępnia tą zmienną poprzez model, ale metoda `createUser` udostępnia już inną zmienną (`newUser`). W efekcie nie możemy ponownie użyć strony `user.jsp`.
+1. Zmiana nazwy atrybutu utworzonego użytkownika z `user` na `newUser` w kodzie kontrolera nie spowoduje żadnego błędu. Natomiast na widoku już tak. Widok `user.html` bazuje na zmiennej reprezentującej użytkownika i nazwanej `user`. Taka zmienna musi być dostępna w modelu albo w odpowiedniej mapie związanej z zasięgiem żądania, sesji czy aplikacji. Teraz metoda `showUser` udostępnia tą zmienną poprzez model, ale metoda `createUser` udostępnia już inną zmienną (`newUser`). W efekcie nie możemy ponownie użyć strony `user.html`.

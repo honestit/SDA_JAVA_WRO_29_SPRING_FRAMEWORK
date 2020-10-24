@@ -1,21 +1,18 @@
 Główna klasa konfiguracyjna kontekstu `RootConfig`:
 
 ```java
-package pl.honestit.spring.mvc.config;
+package pl.honestit.spring.mvc;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@ComponentScan(basePackages = "pl.honestit.spring.mvc.core",
-    excludeFilters = @ComponentScan.Filter(
-            type = FilterType.ANNOTATION,
-            value = EnableWebMvc.class
-    ))
+@ComponentScan
+@EnableWebMvc
 public class RootConfig {
 }
+
 ```
 
 ---
@@ -25,15 +22,14 @@ Klasa konfiguracyjna dla Spring MVC, czyli `WebConfig`:
 ```java
 package pl.honestit.spring.mvc.config;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@ComponentScan(basePackages = "pl.honestit.spring.mvc.web")
 public class WebConfig implements WebMvcConfigurer {
-
 }
+
+
 ```
 
 ---
@@ -42,34 +38,41 @@ Klasa inicjalizująca konteksty Spring'a w konterzene servletów oraz rejestruj�
 główny servlet Spring MVC czyli `DispatcherServlet`:
 
 ```java
-package pl.honestit.spring.mvc.config;
+package pl.honestit.spring.mvc;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import pl.honestit.spring.mvc.config.WebConfig;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.Filter;
 
-public class ApplicationInitializer implements WebApplicationInitializer {
+public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(RootConfig.class);
-        servletContext.addListener(new ContextLoaderListener(rootContext));
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[] {RootConfig.class};
+    }
 
-        AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-        webContext.register(WebConfig.class);
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[] {WebConfig.class};
+    }
 
-        ServletRegistration.Dynamic registration =
-                servletContext.addServlet("dispatcher", new DispatcherServlet(webContext));
-        registration.addMapping("/");
-        registration.setLoadOnStartup(1);
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] {"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
+        return new Filter[] {encodingFilter};
     }
 }
+
 ```
 
 ---
@@ -79,31 +82,36 @@ Dodatkowo również konfiguracja z pliku `pom.xml`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.honestit.spring</groupId>
-    <artifactId>spring-mvc</artifactId>
+    <artifactId>spring-mvc2</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>spring-mvc Maven Webapp</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.framework.version>5.0.7.RELEASE</spring.framework.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <spring.framework.version>5.2.9.RELEASE</spring.framework.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.framework.version}</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>3.0.11.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -113,27 +121,15 @@ Dodatkowo również konfiguracja z pliku `pom.xml`:
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>spring-mvc</finalName>
+        <finalName>spring-mvc2</finalName>
     </build>
 </project>
+
 ```
