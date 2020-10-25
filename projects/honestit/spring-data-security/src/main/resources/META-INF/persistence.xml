@@ -17,10 +17,11 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
 
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.import_files" value="sql/initData.sql,sql/testData.sql"/>
         </properties>
     </persistence-unit>
 
