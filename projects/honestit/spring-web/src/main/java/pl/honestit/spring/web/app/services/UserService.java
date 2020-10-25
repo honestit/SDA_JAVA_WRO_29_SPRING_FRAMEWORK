@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserService {
 
     private final UserIdGenerator userIdGenerator;
-
     private ConcurrentHashMap<Long, User> users = new ConcurrentHashMap<>();
 
     public Long saveUser(UserDTO userDTO) {
