@@ -1,0 +1,16 @@
+<nav class="light-blue" xmlns:th="http://www.thymeleaf.org" th:fragment="navigation">
+    <div class="nav-wrapper container" role="navigation">
+        <a id="logo-container" href="/">Strefa wiedzy</a>
+            <span th:if="${session['user'] != null}" th:text="${session['user'].login}"></span>
+        <ul class="right">
+            <li><a href="/">Strona główna</a></li>
+            <li><a href="/user/skills">Twoje umiejętności</a></li>
+            <li><a href="/user/sources">Źrodła wiedzy</a></li>
+            <li><a href="/admin">Panel administracyjny</a></li>
+        </ul>
+        <ul class="right">
+            <li><a href="/login">Zaloguj</a></li>
+            <li><a href="/logout">Wyloguj</a></li>
+        </ul>
+    </div>
+</nav>

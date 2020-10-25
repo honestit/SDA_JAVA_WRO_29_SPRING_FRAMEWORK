@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:include="elements/header :: heading">
+    <title>Strona główna</title>
+</head>
+<body>
+<nav th:include="elements/menu :: navigation"></nav>
+<div class="container">
+    <div class="row center">
+        <h2>Najbardziej umiejętni użytkownicy</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Pozycja</th>
+                <th>Login</th>
+                <th>Unikalne umiejętności</th>
+                <th>Wszystkie potwierdzenia umiejętności</th>
+                <th>Liczba znanych źródeł</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="topUser, status : ${topUsers}">
+                <td th:text="|${status.index + 1}.|"></td>
+                <td th:text="${topUser.login}"></td>
+                <td th:text="${topUser.uniqueSkillsCount}"></td>
+                <td th:text="${topUser.allSkillsCount}"></td>
+                <td th:text="${topUser.knowledgeSourceCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="divider"></div>
+    <div class="row center">
+        <h2>Najlepsi w popularnych umiejętnościach</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Pozycja</th>
+                <th>Umiejętność</th>
+                <th>Kategoria</th>
+                <th>Najlepszy użytkownik</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="topSkill, status : ${topSkills}">
+                <td th:text="|${status.index + 1}.|"></td>
+                <td th:text="${topSkill.name}"></td>
+                <td th:text="${topSkill.category}"></td>
+                <td th:text="${topSkill.bestUser}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="divider"></div>
+</div>
+</body>
+</html>

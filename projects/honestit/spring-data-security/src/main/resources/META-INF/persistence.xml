@@ -1,0 +1,28 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="knowledgePU">
+        <properties>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:h2:file:~/spring-kb"/>
+
+            <!--Zmienić nazwę użytkownika na swojego-->
+            <property name="javax.persistence.jdbc.user" value="root"/>
+
+            <!--Zmienić hasło użytkownika na swoje-->
+            <property name="javax.persistence.jdbc.password" value="pass"/>
+
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+        </properties>
+    </persistence-unit>
+
+
+</persistence>

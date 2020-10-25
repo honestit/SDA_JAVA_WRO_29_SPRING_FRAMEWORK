@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:include="elements/header :: heading">
+    <title>Strona główna</title>
+</head>
+<body>
+<nav th:include="elements/menu :: navigation"></nav>
+<div class="container">
+    <div class="row center"><h2>Twoje potwierdzone źródła wiedzy</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Nazwa</th>
+                <th>Umiejętności</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="source, status : ${sources}">
+                    <td th:text="|${status.index + 1}.|"></td>
+                    <td th:text="${source.name}"></td>
+                    <td th:text="${#strings.setJoin(source.connectedSkillsNames, ', ')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="divider"></div>
+    <div class="row center">
+        <h2>Dostępne źródła wiedzy do potwierdzenia</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Link</th>
+                <th>Umiejętności</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="source, status : ${availableSources}">
+                    <td th:text="|${status.index + 1}.|"></td>
+                    <td th:text="${source.name}"></td>
+                    <td th:text="${source.description}"></td>
+                    <td><a th:href="@{__${source.url}__}">Link</a></td>
+                    <td th:text="${#strings.setJoin(source.connectedSkillsNames, ', ')}"></td>
+                    <td th:with="confirmSource=@{/user/sources/confirm}">
+                        <form method="post" th:action="@{__${confirmSource}__}">
+                            <input type="hidden" name="sourceId" th:value="${source.id}"/>
+                            <button type="submit" class="waves-effect waves-light btn-small">
+                                Potwierdź
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
