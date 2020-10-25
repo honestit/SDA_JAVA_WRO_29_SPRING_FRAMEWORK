@@ -1,7 +1,12 @@
 package pl.honestit.spring.kb.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
+@AllArgsConstructor @NoArgsConstructor @Builder
 public class LoggedUserDTO {
 
     private Long id;
