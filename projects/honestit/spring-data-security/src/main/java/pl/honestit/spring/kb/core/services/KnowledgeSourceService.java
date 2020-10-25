@@ -1,6 +1,9 @@
 package pl.honestit.spring.kb.core.services;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.honestit.spring.kb.data.repository.KnowledgeSourceRepository;
 import pl.honestit.spring.kb.dto.AddKnowledgeSourceDTO;
 import pl.honestit.spring.kb.dto.KnowledgeSourceDTO;
 import pl.honestit.spring.kb.dto.LoggedUserDTO;
@@ -9,7 +12,10 @@ import pl.honestit.spring.kb.utils.TestDataGenerator;
 import java.util.List;
 
 @Service
+@Slf4j @RequiredArgsConstructor
 public class KnowledgeSourceService {
+
+    private final KnowledgeSourceRepository knowledgeSourceRepository;
 
 
     public List<KnowledgeSourceDTO> getSourcesKnownByUser(LoggedUserDTO user) {
