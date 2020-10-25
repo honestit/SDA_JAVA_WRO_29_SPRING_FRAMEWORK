@@ -2,6 +2,7 @@ package pl.honestit.spring.web.app;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import pl.honestit.spring.web.app.config.WebConfig;
 
 import javax.servlet.Filter;
 

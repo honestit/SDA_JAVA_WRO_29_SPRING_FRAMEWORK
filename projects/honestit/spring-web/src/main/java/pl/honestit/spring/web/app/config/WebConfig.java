@@ -1,4 +1,4 @@
-package pl.honestit.spring.web.app;
+package pl.honestit.spring.web.app.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

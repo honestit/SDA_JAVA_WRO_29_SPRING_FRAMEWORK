@@ -10,4 +10,5 @@ public class User {
     private String lastName;
     private Integer age;
     private String gender;
+    private String country;
 }
