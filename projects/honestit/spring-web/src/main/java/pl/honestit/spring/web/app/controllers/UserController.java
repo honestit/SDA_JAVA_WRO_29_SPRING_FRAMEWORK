@@ -1,13 +1,14 @@
 package pl.honestit.spring.web.app.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.honestit.spring.web.app.model.User;
-import pl.honestit.spring.web.app.session.UserIdGenerator;
+import org.springframework.web.server.ResponseStatusException;
+import pl.honestit.spring.web.app.dto.UserDTO;
+import pl.honestit.spring.web.app.services.UserService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -15,24 +16,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserIdGenerator userIdGenerator;
+    private final UserService userService;
 
     @ModelAttribute("countries")
     public List<String> countries() {
         return List.of("Polska", "Niemcy", "Francja", "Anglia");
     }
 
-    @GetMapping("/{id:\\d+}") // /users/90
+    @GetMapping("/{id:\\d+}")
     public String showUser(@PathVariable Long id, Model model) {
-        User user = User.builder()
-                .id(id)
-                .firstName("Jan").lastName("Kowalski")
-                .age(70).gender("Mężczyzna").country("Uzbekistan")
-                .build();
+        UserDTO user = userService.getUser(id);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Użytkownik o id = " + id + "nie istnieje");
+        }
         model.addAttribute("user", user);
-//        model.addAttribute("userFake", user);
-//        model.addAttribute(user);
-        return "user"; //
+        return "user";
     }
 
     @GetMapping("/add")
@@ -41,23 +39,8 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public String createUser(String firstName, String lastName, Integer age, String gender, String country, Model model) {
-        User user = new User();
-        Long id = userIdGenerator.getNextId();
-
-        // Uzupełniamy pola użytkownika na podstawie przesłanych parametrów
-        user.setId(id);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setAge(age);
-        user.setGender(gender);
-        user.setCountry(country);
-
-        // Dodajemy użytkownika do modelu i zwracamy ten sam identyfikator widoku,
-        // którego używaliśmy do wyświetlenia losowego użytkownika.
-        model.addAttribute("user", user);
-        // Zwróć uwagę, że nie zwracamy tutaj obiektu User a tekst
-        // "user", który odnosi się do strony HTML: /templates/user.html
-        return "user";
+    public String createUser(UserDTO userDTO) {
+        Long userId = userService.saveUser(userDTO);
+        return "redirect:/users/" + userId;
     }
 }

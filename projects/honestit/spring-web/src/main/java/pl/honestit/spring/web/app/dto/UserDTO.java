@@ -1,11 +1,12 @@
-package pl.honestit.spring.web.app.model;
+package pl.honestit.spring.web.app.dto;
 
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class User {
+public class UserDTO {
 
     private Long id;
     private String firstName;
@@ -14,6 +15,4 @@ public class User {
     private String gender;
     private String country;
     private Long versionId;
-    private LocalDateTime creationDate;
-    private LocalDateTime lastModificationDate;
 }
