@@ -18,4 +18,10 @@ public class HomeController {
     public String sayHello() {
         return username + " jesteś dupa";
     }
+
+    @GetMapping("/say-hello")
+    public String sayHelloWithView() {
+        return "hello";
+    }
+
 }

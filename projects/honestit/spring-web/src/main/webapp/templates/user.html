@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil użytkownika</title>
+</head>
+<body>
+<div th:text="|Użytkownik o id: ${user.id}|">Id: 0</div>
+<div th:text="|Imię: ${user.firstName}|">Imię: Jan</div>
+<div th:text="|Nazwisko: ${user.lastName}|">Nazwisko: Kowalski</div>
+<div th:text="|Wiek: ${user.age}|">Wiek: 44</div>
+<div th:text="|Płeć: ${user.gender}|">Płeć: mężczyzna</div>
+
+<div>
+    <a th:href="@{/users/add}">Dodaj kolejnego</a>
+</div>
+</body>
+</html>
