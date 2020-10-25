@@ -19,7 +19,7 @@ public class UserController {
 
     @ModelAttribute("countries")
     public List<String> countries() {
-        return Arrays.asList("Polska", "Niemcy", "Francja", "Anglia");
+        return List.of("Polska", "Niemcy", "Francja", "Anglia");
     }
 
     @GetMapping("/{id:\\d+}") // /users/90
