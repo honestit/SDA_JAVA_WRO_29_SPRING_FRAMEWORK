@@ -112,9 +112,9 @@ public class KnowledgeSourceService {
     }
 
     public boolean activateSource(Long sourceId) {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
-
-        return true;
+        KnowledgeSource knowledgeSource = knowledgeSourceRepository.findById(sourceId).orElseThrow(IllegalArgumentException::new);
+        knowledgeSource.setActive(true);
+        return knowledgeSource.getActive();
     }
 
     public boolean addNewSource(AddKnowledgeSourceDTO newKnowledgeSource) {
