@@ -17,6 +17,8 @@
 
     <logger name="pl.honestit.spring.kb" level="DEBUG"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.springframework.security.web" level="DEBUG"/>
+    <logger name="org.springframework.security.authentication" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

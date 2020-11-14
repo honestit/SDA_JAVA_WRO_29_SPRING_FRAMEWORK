@@ -28,22 +28,22 @@ public class AuthenticationController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public void login(String login, String password, HttpSession session, HttpServletResponse response) throws IOException {
-        boolean validCredentials = userService.checkCredentials(login, password);
-        if (!validCredentials) {
-            response.sendError(401, "Błędne dane logowania");
-            return;
-        }
-
-        LoggedUserDTO user = userService.getUser(login, password);
-        session.setAttribute("user", user);
-        response.sendRedirect("/");
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
+//    @PostMapping("/login")
+//    public void login(String login, String password, HttpSession session, HttpServletResponse response) throws IOException {
+//        boolean validCredentials = userService.checkCredentials(login, password);
+//        if (!validCredentials) {
+//            response.sendError(401, "Błędne dane logowania");
+//            return;
+//        }
+//
+//        LoggedUserDTO user = userService.getUser(login, password);
+//        session.setAttribute("user", user);
+//        response.sendRedirect("/");
+//    }
+//
+//    @GetMapping("/logout")
+//    public String logout(HttpSession session) {
+//        session.invalidate();
+//        return "redirect:/";
+//    }
 }

@@ -31,7 +31,6 @@ public class SkillService {
         Map<User, List<Skill>> usersSkills = new HashMap<>();
         allUsers.forEach(user -> usersSkills.put(user,
                 userRepository.findAllNonDistinctObtainedSkillsForUser(user.getId())));
-
         // Teraz musimy stworzyć mapę obiektów TopSkillDTO, dla której wartościami będzie lista
         // użytkowników którzy tą umiejętność posiadają. Później rozmiar tej listy posłuży nam
         // do wyboru najbardziej popularnych umiejętności, a ilość wystąpień konkretnego użytkownika
