@@ -84,14 +84,30 @@ public class KnowledgeSourceService {
     }
 
     public List<KnowledgeSourceDTO> getAllSources() {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
-
-        return TestDataGenerator.getKnowledgeSourceDTOS(1, 15);
+        return knowledgeSourceRepository.findAll().stream().map(sourceEntity -> {
+            KnowledgeSourceDTO sourceDTO = new KnowledgeSourceDTO();
+            sourceDTO.setId(sourceEntity.getId());
+            sourceDTO.setName(sourceEntity.getName());
+            sourceDTO.setDescription(sourceEntity.getDescription());
+            sourceDTO.setUrl(sourceEntity.getUrl());
+            sourceDTO.setActive(sourceEntity.getActive());
+            sourceDTO.setConnectedSkills(sourceEntity.getConnectedSkills().stream().map(skillEntity -> {
+                SkillDTO skillDTO = new SkillDTO();
+                skillDTO.setId(skillEntity.getId());
+                skillDTO.setName(skillEntity.getName());
+                skillDTO.setCategory(skillEntity.getName());
+                return skillDTO;
+            }).collect(Collectors.toSet()));
+            return sourceDTO;
+        }).collect(Collectors.toList());
     }
 
     public boolean deleteSource(Long sourceId) {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
-
+        KnowledgeSource knowledgeSource = knowledgeSourceRepository.findById(sourceId).orElseThrow(IllegalArgumentException::new);
+        if (knowledgeSource.getActive()) {
+            return false;
+        }
+        knowledgeSourceRepository.delete(knowledgeSource);
         return true;
     }
 
