@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity // Oznaczamy, że klasa jest encją
 @Table(name = "knowledge_sources") // Dodajemy informację o nazwie tabeli dla encji
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id") @ToString(exclude = {"connectedSkills", "knowingUsers"})
 public class KnowledgeSource {
 
     @Id // Wskazujemy pole klucza głównego

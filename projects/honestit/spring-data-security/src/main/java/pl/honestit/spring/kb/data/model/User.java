@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity // Wskazanie klasy jako encji
 @Table(name = "users") // Określenie nazwy tabeli
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id") @ToString(exclude = "knownSources")
 public class User {
 
     @Id // Wskazanie pola klucza głównego
