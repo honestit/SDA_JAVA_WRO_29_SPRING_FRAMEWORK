@@ -2,6 +2,7 @@ package pl.honestit.spring.kb.core.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
 import pl.honestit.spring.kb.data.model.Skill;
@@ -25,9 +26,32 @@ public class UserService {
     private final KnowledgeSourceRepository knowledgeSourceRepository;
 
     public List<TopUserDTO> getTopUsers(int topUsersCount) {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
+        // Pobieramy użytkowników według zapytania i tylko 0 stronę (pierwszą) oraz maksymalnie do wskazanej ilości użytkowników
+        List<User> allUsers = userRepository.findTopUsers(PageRequest.of(0, topUsersCount));
 
-        return TestDataGenerator.getTopUserDTOS();
+        // Budujemy mapę - każdemu użytkownikowi przypisując listę jego nieunikalnych umiejętności
+        Map<User, List<Skill>> userSkills = new HashMap<>();
+        allUsers.forEach(user -> userSkills.put(user, userRepository.findAllNonDistinctObtainedSkillsForUser(user.getId())));
+
+        userSkills.forEach((user, skills) -> System.out.println("user: " + user + ", has skills: " + skills));
+
+        // Tworzymy listę najlepszych użytkowników jako obiektów TopUserDTO
+        List<TopUserDTO> topUsers = new ArrayList<>();
+        userSkills.forEach((user, skills) -> {
+            TopUserDTO topUserDTO = new TopUserDTO();
+            topUserDTO.setLogin(user.getLogin());
+            topUserDTO.setAllSkillsCount(skills.size());
+            // Listę unikalnych umiejętności wrzucamy do zbioru, aby uzyskać tylko unikalne (bazuje na implementacji metody equals i hashCode w klasie Skill)
+            topUserDTO.setUniqueSkillsCount(new HashSet<>(skills).size());
+            topUserDTO.setKnowledgeSourceCount(user.getKnownSources().size());
+            topUsers.add(topUserDTO);
+        });
+
+        // Sortujemy listę w odwrotnej kolejności, a więc najpierw użytkownicy mający najwięcej nieunikalnych umiejętności
+        topUsers.sort(Comparator.comparingInt(TopUserDTO::getAllSkillsCount).reversed());
+
+        // Pobieramy maksymalnie topUsersCount, ale nie więcej niż liczba wszystkich użytkowników
+        return topUsers.subList(0, Math.min(topUsersCount, topUsers.size()));
     }
 
     public List<SkillDTO> getSkillsForUser(LoggedUserDTO user) {
