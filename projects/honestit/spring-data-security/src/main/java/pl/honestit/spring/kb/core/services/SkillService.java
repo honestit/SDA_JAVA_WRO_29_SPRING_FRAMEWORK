@@ -9,6 +9,7 @@ import pl.honestit.spring.kb.dto.TopSkillDTO;
 import pl.honestit.spring.kb.utils.TestDataGenerator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j @RequiredArgsConstructor
@@ -23,8 +24,12 @@ public class SkillService {
     }
 
     public List<SkillDTO> getAllSkills() {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
-
-        return TestDataGenerator.getSkillDTOS();
+        return skillRepository.findAll().stream().map(skill -> {
+            SkillDTO skillDTO = new SkillDTO();
+            skillDTO.setId(skill.getId());
+            skillDTO.setName(skill.getName());
+            skillDTO.setCategory(skill.getCategory());
+            return skillDTO;
+        }).collect(Collectors.toList());
     }
 }

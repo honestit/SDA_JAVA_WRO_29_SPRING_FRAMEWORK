@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
+import pl.honestit.spring.kb.data.model.Skill;
 import pl.honestit.spring.kb.data.model.User;
 import pl.honestit.spring.kb.data.repository.KnowledgeSourceRepository;
+import pl.honestit.spring.kb.data.repository.SkillRepository;
 import pl.honestit.spring.kb.data.repository.UserRepository;
 import pl.honestit.spring.kb.dto.AddKnowledgeSourceDTO;
 import pl.honestit.spring.kb.dto.KnowledgeSourceDTO;
@@ -14,6 +16,7 @@ import pl.honestit.spring.kb.dto.SkillDTO;
 import pl.honestit.spring.kb.utils.TestDataGenerator;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +25,7 @@ public class KnowledgeSourceService {
 
     private final KnowledgeSourceRepository knowledgeSourceRepository;
     private final UserRepository userRepository;
+    private final SkillRepository skillRepository;
 
 
     public List<KnowledgeSourceDTO> getSourcesKnownByUser(LoggedUserDTO user) {
@@ -118,8 +122,38 @@ public class KnowledgeSourceService {
     }
 
     public boolean addNewSource(AddKnowledgeSourceDTO newKnowledgeSource) {
-        // TODO Uzupełnij implementację z wykorzystaniem Spring Data
+        Objects.requireNonNull(newKnowledgeSource);
+        Objects.requireNonNull(newKnowledgeSource.getName());
+        Objects.requireNonNull(newKnowledgeSource.getConnectedSkillsIds());
 
+        // Sprawdzamy czy źródło o takiej nazwie przypadkiem już nie istnieje
+        String sourceName = newKnowledgeSource.getName();
+        KnowledgeSource knowledgeSourceByName = knowledgeSourceRepository.findByName(sourceName).orElse(null);
+        if (knowledgeSourceByName != null) {
+            return false;
+        }
+
+        // Tworzymy podstawowy obiekt encji i uzupełniamy proste wartości
+        KnowledgeSource entity = new KnowledgeSource();
+        entity.setName(sourceName);
+        entity.setDescription(newKnowledgeSource.getDescription());
+        entity.setUrl(newKnowledgeSource.getUrl());
+
+        // Pobieramy teraz listę umiejętności na podstawie listy identyfikatorów i ją ustawiamy gdy nie
+        // jest pusta
+        List<Skill> skills = skillRepository.findAllById(newKnowledgeSource.getConnectedSkillsIds());
+        // Upewniamy się, że obie listy są sobie równe co do rozmiaru
+        if (skills.size() != newKnowledgeSource.getConnectedSkillsIds().size()) {
+            throw new IllegalStateException("Wskazana lista umiejętności i uzyskana lista umiejętności są różnej długości!");
+        }
+        // a jeżeli są puste, to kończymy działanie metody i nie zapisujemy encji
+        if (skills.isEmpty()) {
+            return false;
+        }
+        entity.getConnectedSkills().addAll(skills);
+
+        // Na koniec zapisujemy encję w bazie danych
+        knowledgeSourceRepository.save(entity);
         return true;
     }
 }

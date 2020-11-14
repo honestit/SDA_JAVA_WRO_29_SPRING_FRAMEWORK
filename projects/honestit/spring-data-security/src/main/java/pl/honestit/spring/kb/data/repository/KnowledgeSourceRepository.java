@@ -5,9 +5,12 @@ import pl.honestit.spring.kb.data.model.KnowledgeSource;
 import pl.honestit.spring.kb.data.model.User;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 
 public interface KnowledgeSourceRepository extends JpaRepository<KnowledgeSource, Long> {
 
     Set<KnowledgeSource> findDistinctSourcesByActiveIsTrueAndKnowingUsersNotContains(User user);
+
+    Optional<KnowledgeSource> findByName(String sourceName);
 }
