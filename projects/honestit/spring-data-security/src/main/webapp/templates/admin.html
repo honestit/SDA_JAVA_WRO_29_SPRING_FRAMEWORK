@@ -75,7 +75,7 @@
                                 </button>
                             </form>
                             <form th:if="not ${source.active}" method="post" th:action="@{/admin/sources/activate}">
-                                <input type="hidden" name="sourceId" value="${source.id}"/>
+                                <input type="hidden" name="sourceId" th:value="${source.id}"/>
                                 <button type="submit" class="waves-effect waves-light btn-small">
                                     Aktywuj
                                 </button>
