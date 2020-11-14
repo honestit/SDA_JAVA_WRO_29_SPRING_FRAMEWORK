@@ -47,18 +47,18 @@ INSERT INTO knowledge_sources_skills (source_id, skill_id) VALUES (7, 12);
 INSERT INTO knowledge_sources_skills (source_id, skill_id) VALUES (7, 13);
 
 -- Testowi użytkownicy z rolami i znanymi źródłami
-INSERT INTO users (login, password, first_name, last_name) VALUES ('jnowak', 'jnowak', 'Jan', 'Nowak');
+INSERT INTO users (login, password, first_name, last_name) VALUES ('jnowak', '{noop}jnowak', 'Jan', 'Nowak');
 INSERT INTO users_roles (login, role) VALUES ('jnowak', 'ROLE_USER');
 INSERT INTO users_known_sources (user_id, source_id) VALUES (1, 1);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (1, 4);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (1, 5);
 
-INSERT INTO users (login, password, first_name, last_name) VALUES ('jkowalski', 'jkowalski', 'Jan', 'Kowalski');
+INSERT INTO users (login, password, first_name, last_name) VALUES ('jkowalski', '{noop}jkowalski', 'Jan', 'Kowalski');
 INSERT INTO users_roles (login, role) VALUES ('kowalski', 'ROLE_USER');
 INSERT INTO users_known_sources (user_id, source_id) VALUES (2, 1);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (2, 2);
 
-INSERT INTO users (login, password, first_name, last_name) VALUES ('anowak', 'anowak', 'Anna', 'Nowak');
+INSERT INTO users (login, password, first_name, last_name) VALUES ('anowak', '{noop}anowak', 'Anna', 'Nowak');
 INSERT INTO users_roles (login, role) VALUES ('anowak', 'ROLE_USER');
 INSERT INTO users_known_sources (user_id, source_id) VALUES (3, 1);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (3, 2);
@@ -66,6 +66,6 @@ INSERT INTO users_known_sources (user_id, source_id) VALUES (3, 4);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (3, 5);
 INSERT INTO users_known_sources (user_id, source_id) VALUES (3, 6);
 
-INSERT INTO users (login, password, first_name, last_name) VALUES ('admin', 'admin', 'Admin', 'Admin');
+INSERT INTO users (login, password, first_name, last_name) VALUES ('admin', '{noop}admin', 'Admin', 'Admin');
 INSERT INTO users_roles (login, role) VALUES ('admin', 'ROLE_USER');
 INSERT INTO users_roles (login, role) VALUES ('admin', 'ROLE_ADMIN');

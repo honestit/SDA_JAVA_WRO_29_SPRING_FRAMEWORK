@@ -68,7 +68,7 @@
                     <td><a th:href="@{/__${source.url}__}">Link</a></td>
                     <td th:text="${#strings.setJoin(source.connectedSkillsNames, ', ')}"></td>
                     <td>
-                            <form th:if="${source.active}" method="post" th:action="@{/admin/sources/remove}">
+                            <form th:if="${source.active}" method="post" th:action="@{/admin/sources/delete}">
                                 <input type="hidden" name="sourceId" th:value="${source.id}"/>
                                 <button type="submit" class="waves-effect waves-light btn-small">
                                     Usuń
