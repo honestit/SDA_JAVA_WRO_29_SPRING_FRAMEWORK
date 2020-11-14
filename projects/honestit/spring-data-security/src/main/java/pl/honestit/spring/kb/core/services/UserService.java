@@ -15,10 +15,11 @@ import pl.honestit.spring.kb.dto.SkillDTO;
 import pl.honestit.spring.kb.dto.TopUserDTO;
 import pl.honestit.spring.kb.utils.TestDataGenerator;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Service @Transactional
 @Slf4j @RequiredArgsConstructor
 public class UserService {
 

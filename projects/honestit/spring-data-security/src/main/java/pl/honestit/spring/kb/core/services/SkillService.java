@@ -8,10 +8,11 @@ import pl.honestit.spring.kb.dto.SkillDTO;
 import pl.honestit.spring.kb.dto.TopSkillDTO;
 import pl.honestit.spring.kb.utils.TestDataGenerator;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service @Transactional
 @Slf4j @RequiredArgsConstructor
 public class SkillService {
 
