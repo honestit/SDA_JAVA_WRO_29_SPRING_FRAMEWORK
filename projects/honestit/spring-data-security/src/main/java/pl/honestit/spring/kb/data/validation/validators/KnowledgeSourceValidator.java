@@ -57,6 +57,8 @@ public class KnowledgeSourceValidator {
 
         if (Stream.of(words).anyMatch(badWords::contains)) return false;
 
+        if (Stream.of(words).allMatch(word -> word.matches("\\d+"))) return false;
+
         int wordsLength = Stream.of(words).mapToInt(String::length).sum();
         if (wordsLength < minNameLength) return false;
         if (wordsLength > maxNameLength) return false;

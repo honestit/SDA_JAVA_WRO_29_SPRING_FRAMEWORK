@@ -4,11 +4,14 @@ import org.assertj.core.api.AssertFactory;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
 import pl.honestit.spring.kb.data.model.Skill;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,6 +69,36 @@ class KnowledgeSourceValidatorTest {
             Assertions.assertFalse(result, "Pass for invalid knowledge source name");
         }
 
+        @ParameterizedTest
+        @MethodSource("pl.honestit.spring.kb.data.validation.validators.KnowledgeSourceValidatorTest#lowQualityNames")
+        @DisplayName("- should not pass for low quality knowledge source name")
+        void test3(String name) {
+            source.setName(name);
+
+            boolean result = validator.isValidForSave(source);
+
+            Assertions.assertFalse(result, "Pass for low quality knowledge source name");
+        }
+
+    }
+
+    static List<String> lowQualityNames() {
+        KnowledgeSourceValidator defaultValidator = new KnowledgeSourceValidator();
+        List<String> names = new ArrayList<>();
+        names.add("   ");
+        names.add("123 123");
+        String toShort = "";
+        for (int i = 0; i < defaultValidator.getMinNameLength() - 1; i++) {
+            toShort += "a";
+        }
+        names.add(toShort);
+        String toLong = "";
+        for (int i = 0; i < defaultValidator.getMaxNameLength() + 1; i++) {
+            toLong += "a";
+        }
+        names.add(toLong);
+        names.addAll(defaultValidator.getBadWords());
+        return names;
     }
 
 }
