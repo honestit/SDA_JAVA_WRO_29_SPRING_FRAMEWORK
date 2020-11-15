@@ -1,6 +1,7 @@
 package pl.honestit.spring.kb.data.converters;
 
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
@@ -104,6 +105,28 @@ class KnowledgeSourceConverterTest {
             converter.from(data);
 
             Mockito.verify(skillRepository, Mockito.times(1)).findAllById(data.getConnectedSkillsIds());
+        }
+
+        @Test
+        @DisplayName("- should get skills from database using provided ids")
+        void test7() {
+            data.setConnectedSkillsIds(Set.of(1L, 10L, 100L));
+            // Wykorzystujemy mechanizm z Mockito do przechwycenia wartości
+            // którą mock otrzymał faktycznie z naszej implementacji w ramach
+            // tego testu
+            ArgumentCaptor<Set<Long>> idsCaptor = ArgumentCaptor.forClass(Set.class);
+            Mockito.when(skillRepository.findAllById(idsCaptor.capture())).thenReturn(List.of());
+
+            converter.from(data);
+
+            // Tu pobieramy wartość, którą ArgumentCaptor przechwycił
+            // i weryfikujemy czy się zgadza z wartością, którą użyliśmy w teście
+            Set<Long> ids = idsCaptor.getValue();
+            org.assertj.core.api.Assertions.assertThat(ids)
+                    .isNotNull()
+                    .isNotEmpty()
+                    .hasSize(data.getConnectedSkillsIds().size())
+                    .hasSameElementsAs(data.getConnectedSkillsIds());
         }
 
 
