@@ -37,6 +37,9 @@ class KnowledgeSourceValidatorTest {
             boolean result = validator.isValidForSave(source);
 
             Assertions.assertTrue(result, "Valid knowledge source did not pass");
+            org.assertj.core.api.Assertions.assertThat(result)
+                    .describedAs("Valid knowledge source did not pass")
+                    .isTrue();
         }
 
     }
