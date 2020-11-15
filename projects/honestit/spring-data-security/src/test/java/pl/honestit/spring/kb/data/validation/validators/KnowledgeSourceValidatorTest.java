@@ -2,6 +2,10 @@ package pl.honestit.spring.kb.data.validation.validators;
 
 import org.assertj.core.api.AssertFactory;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
 import pl.honestit.spring.kb.data.model.Skill;
 
@@ -49,10 +53,13 @@ class KnowledgeSourceValidatorTest {
                     .isTrue();
         }
 
-        @Test
+        @ParameterizedTest
+        @NullSource
+        @EmptySource
+        @ValueSource(strings = {" ", "\t", "\n", "     "})
         @DisplayName("- should not pass for invalid knowledge source name")
-        void test2() {
-            source.setName(null);
+        void test2(String name) {
+            source.setName(name);
 
             boolean result = validator.isValidForSave(source);
 
