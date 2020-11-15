@@ -1,0 +1,4 @@
+POST localhost:8080/admin/sources/add
+Content-Type: application/x-www-form-urlencoded
+
+name=abc&description=z&url=abab&connectedSkillsIds=1&connectedSkillsIds=4dvbg7&connectedSkills=14

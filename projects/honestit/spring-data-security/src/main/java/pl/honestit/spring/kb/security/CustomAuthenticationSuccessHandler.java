@@ -36,6 +36,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("user", user);
 
         // Robimy przekierowanie
-        new DefaultRedirectStrategy().sendRedirect(request, response, "/");
+        String targetURL = "/";
+//        String referer = request.getHeader("Referer");
+//        if (referer != null) {
+//            targetURL = referer;
+//        }
+        new DefaultRedirectStrategy().sendRedirect(request, response, targetURL);
     }
 }

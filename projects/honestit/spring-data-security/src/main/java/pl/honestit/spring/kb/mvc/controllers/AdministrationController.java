@@ -52,6 +52,12 @@ public class AdministrationController {
     }
 
     @PostMapping("/sources/add")
+    // private String addNewKnowledgeSource(@RequestParam String name, String description, String url, Set<Long> connectedSkillsIds)
+    // GET /source/add?name=abc&description=z&url=abab&connectedSkillsIds=1&connectedSkillsIds=4dvbg7&connectedSkills=14
+    // HttpServletRequest request = ...
+    // String[] values = request.getParameterValues("connectedSkillsIds");
+    // Set<Long> ids = Stream.of(values).map(Long::parseLong).collect(Collectors.toSet());
+
     private String addNewKnowledgeSource(AddKnowledgeSourceDTO newKnowledgeSource) {
         knowledgeSourceService.addNewSource(newKnowledgeSource);
         return "redirect:/admin";
