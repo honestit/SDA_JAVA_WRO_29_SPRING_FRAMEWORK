@@ -3,13 +3,11 @@ package pl.honestit.spring.kb.data.validation.validators;
 import org.assertj.core.api.AssertFactory;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
 import pl.honestit.spring.kb.data.model.Skill;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,6 +80,41 @@ class KnowledgeSourceValidatorTest {
             Assertions.assertFalse(result, "Pass for low quality knowledge source name");
         }
 
+        @ParameterizedTest
+        @NullSource
+        @EmptySource
+        @ValueSource(strings = {" ", "\t", "\n", "     "})
+        @DisplayName("- should not pass for invalid knowledge source description")
+        void test4(String description) {
+            source.setDescription(description);
+
+            boolean result = validator.isValidForSave(source);
+
+            Assertions.assertFalse(result, "Pass for invalid knowledge source name");
+        }
+
+        @ParameterizedTest
+        @MethodSource("pl.honestit.spring.kb.data.validation.validators.KnowledgeSourceValidatorTest#lowQualityDescriptions")
+        @DisplayName("- should not pass for low quality knowledge source description")
+        void test5(String description) {
+            source.setName(description);
+
+            boolean result = validator.isValidForSave(source);
+
+            Assertions.assertFalse(result, "Pass for low quality knowledge source name");
+        }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        @DisplayName("- should not pass for knowledge source without skills")
+        void test5(Set<Skill> skills) {
+            source.setConnectedSkills(skills);
+
+            boolean result = validator.isValidForSave(source);
+
+            Assertions.assertFalse(result, "Passed for knowledge source without skills");
+        }
+
     }
 
     static List<String> lowQualityNames() {
@@ -89,8 +122,22 @@ class KnowledgeSourceValidatorTest {
         List<String> names = new ArrayList<>();
         names.add("   ");
         names.add("123 123");
-        names.add(IntStream.rangeClosed(0, defaultValidator.getMinNameLength() - 1).mapToObj(i -> "a").collect(Collectors.joining()));
-        names.add(IntStream.rangeClosed(0, defaultValidator.getMaxNameLength() + 1).mapToObj(i -> "a").collect(Collectors.joining()));
+        names.add(IntStream.generate(() -> 1).limit(defaultValidator.getMinNameLength() - 1).mapToObj(i -> "a").collect(Collectors.joining()));
+        names.add(IntStream.generate(() -> 1).limit(defaultValidator.getMaxNameLength() + 1).mapToObj(i -> "a").collect(Collectors.joining()));
+        names.addAll(defaultValidator.getBadWords());
+        return names;
+    }
+
+    static List<String> lowQualityDescriptions() {
+        KnowledgeSourceValidator defaultValidator = new KnowledgeSourceValidator();
+        List<String> names = new ArrayList<>();
+        names.add("   ");
+        names.add("123 123");
+        names.add("some word less five");
+        String text = IntStream.generate(() -> 1).limit(defaultValidator.getMinDescriptionLength() - 1).mapToObj(i -> "a").collect(Collectors.joining());
+        System.out.println(text.length());
+        names.add(IntStream.generate(() -> 1).limit(defaultValidator.getMinDescriptionLength() - 1).mapToObj(i -> "a").collect(Collectors.joining()));
+        names.add(IntStream.generate(() -> 1).limit(defaultValidator.getMaxDescriptionLength() + 1).mapToObj(i -> "a").collect(Collectors.joining()));
         names.addAll(defaultValidator.getBadWords());
         return names;
     }

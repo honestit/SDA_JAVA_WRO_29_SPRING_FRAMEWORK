@@ -45,6 +45,7 @@ public class KnowledgeSourceValidator {
         if (Stream.of(words).anyMatch(badWords::contains)) return false;
 
         int wordsLength = Stream.of(words).mapToInt(String::length).sum();
+        System.out.println(wordsLength);
         if (wordsLength < minDescriptionLength) return false;
         if (wordsLength > maxDescriptionLength) return false;
 
