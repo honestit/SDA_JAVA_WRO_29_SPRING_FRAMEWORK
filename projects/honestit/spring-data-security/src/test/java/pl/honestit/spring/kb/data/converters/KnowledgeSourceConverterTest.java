@@ -95,6 +95,19 @@ class KnowledgeSourceConverterTest {
             Mockito.verify(skillRepository, Mockito.times(1)).findAllById(ArgumentMatchers.anyIterable());
         }
 
+        @Test
+        @DisplayName("- should get skills from database using provided ids")
+        void test6() {
+            data.setConnectedSkillsIds(Set.of(1L,10L,100L));
+            Mockito.when(skillRepository.findAllById(data.getConnectedSkillsIds())).thenReturn(List.of());
+
+            converter.from(data);
+
+            Mockito.verify(skillRepository, Mockito.times(1)).findAllById(data.getConnectedSkillsIds());
+        }
+
+
+
         private void assertThatShouldBePropertyConverted(KnowledgeSource converted) {
             Assertions.assertNotNull(converted);
             Assertions.assertNull(converted.getId());

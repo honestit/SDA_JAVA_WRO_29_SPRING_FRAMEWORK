@@ -3,8 +3,11 @@ package pl.honestit.spring.kb.data.converters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
+import pl.honestit.spring.kb.data.model.Skill;
 import pl.honestit.spring.kb.data.repository.SkillRepository;
 import pl.honestit.spring.kb.dto.AddKnowledgeSourceDTO;
+
+import java.util.List;
 
 @Component @RequiredArgsConstructor
 public class KnowledgeSourceConverter {
@@ -25,7 +28,7 @@ public class KnowledgeSourceConverter {
         knowledgeSource.setUrl(data.getUrl());
 
         if (data.getConnectedSkillsIds() == null) throw new IllegalArgumentException("Źródło wiedzy musi mieć umiejętności");
-        // TODO Przepisanie umiejętności zrealizujemy w dalszej części
+        skillRepository.findAllById(data.getConnectedSkillsIds());
 
         return knowledgeSource;
     }
