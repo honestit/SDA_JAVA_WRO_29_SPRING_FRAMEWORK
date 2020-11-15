@@ -3,10 +3,8 @@ package pl.honestit.spring.kb.mvc.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import pl.honestit.spring.kb.core.services.KnowledgeSourceService;
 import pl.honestit.spring.kb.core.services.SkillService;
 import pl.honestit.spring.kb.core.services.UserService;
@@ -34,21 +32,20 @@ public class AdministrationController {
         this.knowledgeSourceService = knowledgeSourceService;
     }
 
+    @ModelAttribute("sources")
+    public List<KnowledgeSourceDTO> sources() {
+        return knowledgeSourceService.getAllSources();
+    }
+
+    @ModelAttribute("availableSkills")
+    public List<SkillDTO> availableSkills() {
+        return skillService.getAllSkills();
+    }
+
     @GetMapping
-    public String prepareAdminPanel(Model model, @SessionAttribute(required = false) LoggedUserDTO user) {
-        if (user == null) {
-            TestDataGenerator.getLoggedUserDTO("admin");
-        }
+    public String prepareAdminPanel(Model model) {
         AddKnowledgeSourceDTO newSource = new AddKnowledgeSourceDTO();
         model.addAttribute("newSource", newSource);
-
-        List<KnowledgeSourceDTO> allSources = knowledgeSourceService.getAllSources();
-        model.addAttribute("sources", allSources);
-
-        List<SkillDTO> allSkills = skillService.getAllSkills();
-        model.addAttribute("availableSkills", allSkills);
-
-        model.addAttribute("user", user);
         return "admin";
     }
 
@@ -60,7 +57,14 @@ public class AdministrationController {
     // String[] values = request.getParameterValues("connectedSkillsIds");
     // Set<Long> ids = Stream.of(values).map(Long::parseLong).collect(Collectors.toSet());
 
-    private String addNewKnowledgeSource(@Valid AddKnowledgeSourceDTO newKnowledgeSource) {
+    /* Parametr BindingResult musi być bezpośrednio następnym po parametrze walidowanym */
+    private String addNewKnowledgeSource(
+            @Valid @ModelAttribute("newSource") AddKnowledgeSourceDTO newKnowledgeSource,
+            BindingResult bindings ) {
+
+        if (bindings.hasErrors()) {
+            return "admin";
+        }
         knowledgeSourceService.addNewSource(newKnowledgeSource);
         return "redirect:/admin";
     }
