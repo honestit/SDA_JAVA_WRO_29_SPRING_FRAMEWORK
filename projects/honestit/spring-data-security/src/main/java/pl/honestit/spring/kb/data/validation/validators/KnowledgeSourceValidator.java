@@ -22,11 +22,11 @@ public class KnowledgeSourceValidator {
     public boolean isValidForSave(KnowledgeSource data) {
         if (data == null) return false;
 
-        if (data.getName() == null || data.getName().isBlank()) return false;
-        if (!isNameQualitative(data.getName())) return false;
-
         if (data.getDescription() == null || data.getDescription().isBlank()) return false;
         if (!isDescriptionQualitative(data.getDescription())) return false;
+
+        if (data.getName() == null || data.getName().isBlank()) return false;
+        if (!isNameQualitative(data.getName())) return false;
 
         if (data.getUrl() == null || data.getUrl().isBlank()) return false;
         if (!isUrlQualitative(data.getUrl())) return false;
