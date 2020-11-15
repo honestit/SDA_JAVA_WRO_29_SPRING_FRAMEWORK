@@ -1,19 +1,26 @@
 package pl.honestit.spring.kb.data.converters;
 
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
+import pl.honestit.spring.kb.data.repository.SkillRepository;
 import pl.honestit.spring.kb.dto.AddKnowledgeSourceDTO;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @DisplayName("Specification for KnowledgeSourceConverter class")
 class KnowledgeSourceConverterTest {
 
     KnowledgeSourceConverter converter;
+    SkillRepository skillRepository;
 
     @BeforeEach
     void setUp() {
-        converter = new KnowledgeSourceConverter();
+        skillRepository = Mockito.mock(SkillRepository.class);
+        converter = new KnowledgeSourceConverter(skillRepository);
     }
 
     @Nested
@@ -76,6 +83,16 @@ class KnowledgeSourceConverterTest {
         @DisplayName("- should fail when converted from data with null values")
         void test4(AddKnowledgeSourceDTO data) {
 
+        }
+
+        @Test
+        @DisplayName("- should get skills from database")
+        void test5() {
+            Mockito.when(skillRepository.findAllById(ArgumentMatchers.anyIterable())).thenReturn(List.of());
+
+            converter.from(data);
+
+            Mockito.verify(skillRepository, Mockito.times(1)).findAllById(ArgumentMatchers.anyIterable());
         }
 
         private void assertThatShouldBePropertyConverted(KnowledgeSource converted) {

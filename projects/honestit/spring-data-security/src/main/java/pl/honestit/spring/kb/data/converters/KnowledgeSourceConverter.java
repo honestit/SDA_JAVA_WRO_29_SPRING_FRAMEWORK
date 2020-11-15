@@ -1,11 +1,15 @@
 package pl.honestit.spring.kb.data.converters;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.honestit.spring.kb.data.model.KnowledgeSource;
+import pl.honestit.spring.kb.data.repository.SkillRepository;
 import pl.honestit.spring.kb.dto.AddKnowledgeSourceDTO;
 
-@Component
+@Component @RequiredArgsConstructor
 public class KnowledgeSourceConverter {
+
+    private final SkillRepository skillRepository;
 
     public KnowledgeSource from(AddKnowledgeSourceDTO data) {
         if (data == null) throw new IllegalArgumentException("Nie można konwertować z null");
