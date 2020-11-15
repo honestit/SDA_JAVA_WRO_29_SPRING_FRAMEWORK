@@ -69,6 +69,12 @@ class KnowledgeSourceConverterTest {
             org.assertj.core.api.Assertions.assertThatThrownBy(() -> converter.from(data), "Did not fail on null input")
                     .hasMessageContaining("null")
                     .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Disabled
+        @Test
+        @DisplayName("- should fail when converted from data with null values")
+        void test4(AddKnowledgeSourceDTO data) {
 
         }
 
