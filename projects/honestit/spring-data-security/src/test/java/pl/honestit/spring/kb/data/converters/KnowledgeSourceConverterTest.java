@@ -59,6 +59,19 @@ class KnowledgeSourceConverterTest {
 
         }
 
+        @Test
+        @DisplayName("- should fail when converted from null value")
+        void test3() {
+            data = null;
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> converter.from(data), "Did not fail on null input");
+
+            org.assertj.core.api.Assertions.assertThatThrownBy(() -> converter.from(data), "Did not fail on null input")
+                    .hasMessageContaining("null")
+                    .isInstanceOf(IllegalArgumentException.class);
+
+        }
+
         private void assertThatShouldBePropertyConverted(KnowledgeSource converted) {
             Assertions.assertNotNull(converted);
             Assertions.assertNull(converted.getId());
