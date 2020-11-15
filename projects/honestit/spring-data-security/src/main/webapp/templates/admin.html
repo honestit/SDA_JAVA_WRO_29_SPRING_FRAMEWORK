@@ -12,21 +12,29 @@
         <h3>Dodaj nowe źródło wiedzy</h3>
         <div class="col s2"></div>
         <div class="col s8">
-            <form method="post" action="/admin/sources/add">
+            <form method="post" action="/admin/sources/add" th:object="${newSource}">
+                <fieldset th:if="${#fields.hasErrors()}">
+                    <p th:each="error : ${#fields.allDetailedErrors()}">
+                        <span th:text="${error.fieldName}"></span>: <span
+                            th:text="${error.message}"></span>
+                    </p>
+                </fieldset>
                 <fieldset>
                     <legend>Dane nowego źródła</legend>
                     <p><label for="name">Nazwa: </label><input type="text" required min="3"
-                                                               max="160" name="name"
-                                                               th:value="${newSource.name}"
+                                                               max="160" th:field="*{name}"
                                                                id="name"/>
                     </p>
+                    <p th:if="${#fields.hasErrors('name')}">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
+                    </ul>
+                    </p>
                     <p><label for="description">Opis:</label><textarea cols="20" rows="5"
-                                                                       name="description"
-                                                                       th:value="${newSource.description}"
+                                                                       th:field="*{description}"
                                                                        id="description"></textarea>
                     </p>
-                    <p><label for="url">Adres URL:</label><input type="url" name="url"
-                                                                 th:value="${newSource.url}"
+                    <p><label for="url">Adres URL:</label><input type="url" th:field="*{url}"
                                                                  id="url"/></p>
                 </fieldset>
                 <fieldset>
@@ -61,27 +69,29 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:each="source, status : ${sources}">
-                    <td th:text="|${status.index}.|"></td>
-                    <td th:text="${source.name}"></td>
-                    <td th:text="${source.description}"></td>
-                    <td><a th:href="@{/__${source.url}__}">Link</a></td>
-                    <td th:text="${#strings.setJoin(source.connectedSkillsNames, ', ')}"></td>
-                    <td>
-                            <form th:if="${source.active}" method="post" th:action="@{/admin/sources/delete}">
-                                <input type="hidden" name="sourceId" th:value="${source.id}"/>
-                                <button type="submit" class="waves-effect waves-light btn-small">
-                                    Usuń
-                                </button>
-                            </form>
-                            <form th:if="not ${source.active}" method="post" th:action="@{/admin/sources/activate}">
-                                <input type="hidden" name="sourceId" th:value="${source.id}"/>
-                                <button type="submit" class="waves-effect waves-light btn-small">
-                                    Aktywuj
-                                </button>
-                            </form>
-                    </td>
-                </tr>
+            <tr th:each="source, status : ${sources}">
+                <td th:text="|${status.index}.|"></td>
+                <td th:text="${source.name}"></td>
+                <td th:text="${source.description}"></td>
+                <td><a th:href="@{/__${source.url}__}">Link</a></td>
+                <td th:text="${#strings.setJoin(source.connectedSkillsNames, ', ')}"></td>
+                <td>
+                    <form th:if="${source.active}" method="post"
+                          th:action="@{/admin/sources/delete}">
+                        <input type="hidden" name="sourceId" th:value="${source.id}"/>
+                        <button type="submit" class="waves-effect waves-light btn-small">
+                            Usuń
+                        </button>
+                    </form>
+                    <form th:if="not ${source.active}" method="post"
+                          th:action="@{/admin/sources/activate}">
+                        <input type="hidden" name="sourceId" th:value="${source.id}"/>
+                        <button type="submit" class="waves-effect waves-light btn-small">
+                            Aktywuj
+                        </button>
+                    </form>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

@@ -60,11 +60,16 @@ public class AdministrationController {
     /* Parametr BindingResult musi być bezpośrednio następnym po parametrze walidowanym */
     private String addNewKnowledgeSource(
             @Valid @ModelAttribute("newSource") AddKnowledgeSourceDTO newKnowledgeSource,
-            BindingResult bindings ) {
+            BindingResult bindings) {
 
         if (bindings.hasErrors()) {
             return "admin";
         }
+        if (newKnowledgeSource.getName().equals(newKnowledgeSource.getDescription())) {
+            bindings.rejectValue("description", null, "Opis nie może być taki sam jak nazwa");
+            return "admin";
+        }
+
         knowledgeSourceService.addNewSource(newKnowledgeSource);
         return "redirect:/admin";
     }
