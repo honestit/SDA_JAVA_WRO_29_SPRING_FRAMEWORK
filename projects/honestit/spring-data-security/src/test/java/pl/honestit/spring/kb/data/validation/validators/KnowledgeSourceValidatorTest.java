@@ -13,6 +13,8 @@ import pl.honestit.spring.kb.data.model.Skill;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,16 +89,8 @@ class KnowledgeSourceValidatorTest {
         List<String> names = new ArrayList<>();
         names.add("   ");
         names.add("123 123");
-        String toShort = "";
-        for (int i = 0; i < defaultValidator.getMinNameLength() - 1; i++) {
-            toShort += "a";
-        }
-        names.add(toShort);
-        String toLong = "";
-        for (int i = 0; i < defaultValidator.getMaxNameLength() + 1; i++) {
-            toLong += "a";
-        }
-        names.add(toLong);
+        names.add(IntStream.rangeClosed(0, defaultValidator.getMinNameLength() - 1).mapToObj(i -> "a").collect(Collectors.joining()));
+        names.add(IntStream.rangeClosed(0, defaultValidator.getMaxNameLength() + 1).mapToObj(i -> "a").collect(Collectors.joining()));
         names.addAll(defaultValidator.getBadWords());
         return names;
     }
